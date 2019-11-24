@@ -1,0 +1,126 @@
+Implement a min heap class
+The class should support 
+insertion
+removal -> of the min / root value
+peek --> of the root value
+sifting values up
+sifting values down the heap
+buildHeap -- > given an array
+
+Parent = Math.floor(i - 1 / 2)
+childOne = i * 2 + 1
+childTwo = i * 2 + 2
+
+- Remove 
+  - Swap(0, this.heap.length - 1; array)
+  let value =  this.heap.pop()
+  this.siftDown(0, this.heap.length - 1, this.heap)
+  return value
+  
+- peek 
+  - return this.heap[0]
+  
+- buildHeap
+  lastParent = Math.floor(this.heap.length - 2 / 2)
+  i = lastParent
+  i >= 0 --> keep looping
+    - this.siftDown(i, array.length - 1, array)
+  return array
+  
+- siftUp(idx, array)
+  parent = Math.floor((idx - 1) / 2)
+  while(array[parent] > array[idx]){
+    swap(parent,idx,array)
+    idx = parent
+    parent = Math.floor((idx - 1) / 2)
+  }
+  
+  insert(value) 
+    this.heap.push(value)
+    this.siftUp(this.heap.length - 1, this.heap)
+    
+  -siftDown(idx, lastIdx, array)
+    childOneIdx = idx * 2 + 1
+    while(childOneIdx <= lastIdx){
+      let childTwoIdx = (idx * 2 + 1) <= lastIdx ? (idx * 2 + 1)  : -1 
+      let minChild
+      if(childTwoIdx != -1 && array[childTwoIdx] > array[childOneIdx]){
+        minChild = childTwoIdx
+      }else {
+        minChild = childOneIdx
+      }
+      
+      if(array[minChild] < array[idx]){
+        swap(minChild,idx,array)
+        idx = minChild
+        childOne = idx * 2 + 1
+      }else {
+        break;
+      }
+    }
+
+class MinHeap {
+  constructor(array){
+    this.heap = this.buildHeap(array)
+  }
+  
+  buildHeap(array){
+    let lastParent = Math.floor(array.length - 2 / 2)
+    for(let i = lastParent; i >= 0; i--){
+      this.siftDown(i,array.length - 1, array)
+    }
+    return array
+  }
+  
+  peek(){
+    return this.heap[0]
+  }
+  
+  remove(){
+    this.swap(0,this.heap.length - 1, this.heap)
+    let value = this.heap.pop()
+    this.siftDown(0, this.heap.length - 1, this.heap)
+    return value
+  }
+  
+  siftUp(idx, array){
+    let parentIdx = Math.floor((idx - 1) / 2)
+    while(array[parentIdx] > array[idx]){
+      this.swap(parentIdx,idx, array)
+      idx = parentIdx
+      parentIdx = Math.floor((idx - 1) / 2)
+    }
+  }
+  
+  siftDown(idx, lastIdx, array){
+    let childOneIdx = idx * 2 + 1
+    while(childOneIdx <= lastIdx){
+      let childTwoIdx = (idx * 2 + 2) <= lastIdx ? (idx * 2 + 2) : -1
+      let minChild
+      if(childTwoIdx !== -1 && array[childTwoIdx] < array[childOneIdx]){
+        minChild = childTwoIdx
+      }else {
+        minChild = childOneIdx
+      }
+      
+      if(array[minChild] < array[idx]){
+        this.swap(minChild,idx,array)
+        idx = minChild
+        childOneIdx = idx * 2 + 1
+      }else {
+        break;
+      }
+     }
+  }
+  
+  swap(i,j,array){
+    let temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+  
+  insert(value){
+    this.heap.push(value)
+    this.siftUp(this.heap.length - 1, this.heap)
+  }
+}
